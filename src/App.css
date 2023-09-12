@@ -36,3 +36,33 @@
     transform: rotate(360deg);
   }
 }
+
+.bg{
+  background-color: #EaF1F2;
+}
+
+.sidebar {
+  height: 100vh;
+}
+
+.sidebar-active {
+  background-color: #C27914;
+}
+
+.bg-putihdikit{
+  background-color: #FDFFFF;
+}
+
+.font-nunito{
+  font-family: 'Nunito Sans', sans-serif;
+}
+.font-poppins{
+  font-family: 'Poppins', sans-serif;
+}
+
+.sidebar-link{
+  transition: 0.15s;
+}
+.sidebar-link:hover{
+  background-color: #C2791499;
+}
