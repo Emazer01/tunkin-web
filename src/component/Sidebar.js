@@ -6,7 +6,7 @@ export const Sidebar = () => {
         <div class="d-flex flex-column flex-shrink-0 p-2 p-md-3 text-white bg-dark sidebar sticky-top col-3 col-md-3" height="100vh">
             <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                 <img src={logo} className='col-12 col-md-3 p-md-1' />
-                <span class="fs-4 ps-2 font-poppins d-none d-md-block"><span>Pusinfolahta TNI</span><br />
+                <span class="fs-5 ps-2 font-poppins d-none d-md-block"><span>Pusinfolahta TNI</span><br />
                     <span>Tunjangan Kinerja</span></span>
             </a>
             <hr />

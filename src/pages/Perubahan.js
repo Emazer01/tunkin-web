@@ -17,7 +17,7 @@ export const Perubahan = () => {
         <div className="bg d-flex">
             <Sidebar />
             <div className='w-100'>
-                <div className='fs-4 fw-medium font-poppins bg-putihdikit p-2 ps-3'>
+                <div className='fs-4 fw-medium font-poppins bg-putihdikit p-2 ps-3 border-bottom border-4'>
                     Perubahan
                 </div>
                 <div className='p-2'>

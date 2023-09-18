@@ -66,3 +66,11 @@
 .sidebar-link:hover{
   background-color: #C2791499;
 }
+
+.form-check-input:checked{
+  background-color: #C27914 !important;
+  border: 0;
+}
+.form-check-input:focus, .form-control:focus, .form-select:focus, .label::after, label.form-check-label:focus, .form-check-input::after, .form-check-input:not(:disabled):not(.disabled):active:focus {
+  box-shadow:  0 0 8px #C27914;
+}
