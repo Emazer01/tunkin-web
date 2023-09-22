@@ -49,6 +49,10 @@
   background-color: #C27914;
 }
 
+.border-transparant {
+  border: 1px solid #FDFFFF;
+}
+
 .bg-putihdikit{
   background-color: #FDFFFF;
 }
