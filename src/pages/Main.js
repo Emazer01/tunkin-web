@@ -28,7 +28,7 @@ export const Main = () => {
             {
                 label: 'Dataset 1',
                 data: [10, 40, 20, 40, 23, 12, 50, 23, 12,],
-                backgroundColor: '#C27914',
+                backgroundColor: '#BB3214',
             }
         ],
     };
@@ -39,12 +39,12 @@ export const Main = () => {
                 label: "# of Votes",
                 data: [12, 40],
                 backgroundColor: [
-                    "#C2791499",
-                    "#C27914"
+                    "#BB321499",
+                    "#BB3214"
                 ],
                 borderColor: [
-                    "#C2791499",
-                    "#C27914"
+                    "#BB321499",
+                    "#BB3214"
                 ],
                 borderWidth: 0
             }
@@ -62,13 +62,18 @@ export const Main = () => {
                         console.log(response.data)
                         var stringRecent = ""
                         for (let index = 0; index < response.data.length; index++) {
+                            var jam = Number(response.data[index].log_stamp.slice(11,13)) + 7
+                            if (jam>=24) {
+                                jam=jam-24
+                            }
+                            const stringWaktu = response.data[index].tipe_label + ' pada ' + response.data[index].log_stamp.slice(8,10) + ' ' + response.data[index].log_stamp.slice(5,7) + ' ' + response.data[index].log_stamp.slice(0,4) + ' ' + jam + response.data[index].log_stamp.slice(13,20)
                             stringRecent +=
                                 `<div class='row border-2 border-bottom'>
                                     <p class='col-6 col-md-3 border-2 border-end py-2 m-0'>${response.data[index].pers_nama}</p>
-                                    <p class='col-2 d-none d-md-block border-2 border-end py-2 m-0'>${response.data[index].pangkat_label}</p>
+                                    <p class='col-2 d-none d-md-block border-2 border-end py-2 m-0'>${response.data[index].pangkat_label} ${response.data[index].korps_kode}</p>
                                     <p class='col-2 d-none d-md-block border-2 border-end py-2 m-0'>${response.data[index].satker_label}</p>
                                     <p class='col-2 d-none d-md-block border-2 border-end py-2 m-0'>${response.data[index].jab_label}</p>
-                                    <p class='col-6 col-md-3 border-2 border-end py-2 m-0'>${response.data[index].tipe_label + ' pada ' + response.data[index].log_stamp.slice(8,10) + ' ' + response.data[index].log_stamp.slice(5,7) + ' ' + response.data[index].log_stamp.slice(0,4)}</p>
+                                    <p class='col-6 col-md-3 border-2 border-end py-2 m-0'>${stringWaktu}</p>
                                 </div>`
                         }
                         document.getElementById('recent').innerHTML = stringRecent

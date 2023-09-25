@@ -46,7 +46,7 @@
 }
 
 .sidebar-active {
-  background-color: #C27914;
+  background-color: #BB3214;
 }
 
 .border-transparant {
@@ -68,13 +68,13 @@
   transition: 0.15s;
 }
 .sidebar-link:hover{
-  background-color: #C2791499;
+  background-color: #BB321499;
 }
 
 .form-check-input:checked{
-  background-color: #C27914 !important;
+  background-color: #BB3214 !important;
   border: 0;
 }
 .form-check-input:focus, .form-control:focus, .form-select:focus, .label::after, label.form-check-label:focus, .form-check-input::after, .form-check-input:not(:disabled):not(.disabled):active:focus {
-  box-shadow:  0 0 8px #C27914;
+  box-shadow:  0 0 8px #BB3214;
 }

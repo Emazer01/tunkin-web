@@ -50,10 +50,10 @@ export const Perubahan = () => {
                         var stringRecent = ""
                         for (let index = 0; index < response.data.length; index++) {
                             stringRecent +=
-                                `<a href='/perubahan/?id=123' class='row btn btn-light d-flex p-0 rounded-0 text-start border-2 border-bottom'>
+                                `<a href='/view/?id=${response.data[index].pers_id}' class='row btn btn-light d-flex p-0 rounded-0 text-start border-2 border-bottom'>
                                     <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${response.data[index].pers_nrp}</small></p>
                                     <p class='col-6 col-md-3 border-2 border-end py-1 m-0'><small>${response.data[index].pers_nama}</small></p>
-                                    <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${response.data[index].pangkat_label}</small></p>
+                                    <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${response.data[index].pangkat_label} ${response.data[index].korps_kode}</small></p>
                                     <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${response.data[index].satker_label}</small></p>
                                     <p class='col-6 col-md-3 border-2 border-end py-1 m-0'><small>${response.data[index].jab_label}</small></p>
                                 </a>`
@@ -82,10 +82,10 @@ export const Perubahan = () => {
         for (let index = 0; index < recent.length; index++) {
             if (recent[index].pers_nama.toLowerCase().includes(find)) {
                 stringRecent +=
-                    `<a href='/perubahan/?id=123' class='row btn btn-light d-flex p-0 rounded-0 text-start border-2 border-bottom'>
+                    `<a href='/view/?id=${recent[index].pers_id}' class='row btn btn-light d-flex p-0 rounded-0 text-start border-2 border-bottom'>
                     <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${recent[index].pers_nrp}</small></p>
                     <p class='col-6 col-md-3 border-2 border-end py-1 m-0'><small>${recent[index].pers_nama}</small></p>
-                    <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${recent[index].pangkat_label}</small></p>
+                    <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${recent[index].pangkat_label} ${recent[index].korps_kode}</small></p>
                     <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${recent[index].satker_label}</small></p>
                     <p class='col-6 col-md-3 border-2 border-end py-1 m-0'><small>${recent[index].jab_label}</small></p>
                 </a>`

@@ -3,7 +3,7 @@ import * as React from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export const Tambah = () => {
+export const View = () => {
     const navigate = useNavigate()
     const date = Date()
     const [dataDropdown, setDataDropdown] = React.useState({
@@ -13,12 +13,41 @@ export const Tambah = () => {
         pangkat: '',
         satker: { a: 'asd' }
     })
+    const [dataPers, setDataPers] = React.useState({
+        nrp : '',
+        nama : '',
+        gender : '',
+        matra : '',
+        pangkat : '',
+        korps : '',
+        jabatan : '',
+        satker : '',
+        dpp : '',
+        kawin : '',
+        agama : '',
+        tl : '',
+        mkg : '',
+        tmt_kgb : '',
+        stat_tunjab : '',
+        tmt_jab : '',
+        grade : '',
+        tk_papua : '',
+        tk_terluar : '',
+        tk_terpencil : '',
+        persekot : '',
+        gantirugi : '',
+        sewarumah : '',
+        stat_sandi : '',
+        eselon_sandi : '',
+        tmt_sandi : '',
+        rek : ''
+    })
 
 
     React.useEffect(() => {
         document.getElementById('btn-beranda').classList.remove('sidebar-active')
-        document.getElementById('btn-perubahan').classList.remove('sidebar-active')
-        document.getElementById('btn-tambah').classList.add('sidebar-active')
+        document.getElementById('btn-perubahan').classList.add('sidebar-active')
+        document.getElementById('btn-tambah').classList.remove('sidebar-active')
 
         function dataDropdown() {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataDropdown`)
@@ -48,8 +77,30 @@ export const Tambah = () => {
 
         dataDropdown()
 
-
-
+        const queryString = window.location.search;
+        console.log(queryString);
+        const urlParams = new URLSearchParams(queryString);
+        const pers_id = urlParams.get('id')
+        console.log(pers_id);
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/view`, {
+            pers_id:pers_id,
+        })
+            .then(async function (response) {
+                if (response.status == 200) {
+                    const detail_pers = response.data['0']
+                    console.log(detail_pers)
+                    setDataPers(detail_pers)
+                    document.getElementById('nrp').value = detail_pers.pers_nrp
+                    document.getElementById('matra').value = detail_pers.pers_matra
+                } else {
+                    console.log('Tidak berhasil mengambil data personel')
+                    return
+                }
+            })
+            .catch(async function (error) {
+                console.log(error)
+                return
+            });
     }, [])
 
 
@@ -193,7 +244,7 @@ export const Tambah = () => {
                     await sleep(2000);
                     document.getElementById('submitData-danger').classList.add('d-none')
                     //document.getElementById("submitChanges").classList.add('disabled')
-                    
+
                 }
             })
             .catch(async function (error) {
@@ -216,7 +267,7 @@ export const Tambah = () => {
             <Sidebar />
             <div className='w-100'>
                 <div className='fs-4 fw-medium font-poppins bg-putihdikit p-2 ps-3 border-bottom border-4'>
-                    Tambah
+                    Data Personel
                 </div>
                 <div className='p-3 p-md-5'>
                     <div className='bg-putihdikit rounded-2 p-3 border border-3'>
