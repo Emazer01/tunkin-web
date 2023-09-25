@@ -14,33 +14,33 @@ export const View = () => {
         satker: { a: 'asd' }
     })
     const [dataPers, setDataPers] = React.useState({
-        nrp : '',
-        nama : '',
-        gender : '',
-        matra : '',
-        pangkat : '',
-        korps : '',
-        jabatan : '',
-        satker : '',
-        dpp : '',
-        kawin : '',
-        agama : '',
-        tl : '',
-        mkg : '',
-        tmt_kgb : '',
-        stat_tunjab : '',
-        tmt_jab : '',
-        grade : '',
-        tk_papua : '',
-        tk_terluar : '',
-        tk_terpencil : '',
-        persekot : '',
-        gantirugi : '',
-        sewarumah : '',
-        stat_sandi : '',
-        eselon_sandi : '',
-        tmt_sandi : '',
-        rek : ''
+        nrp: '',
+        nama: '',
+        gender: '',
+        matra: '',
+        pangkat: '',
+        korps: '',
+        jabatan: '',
+        satker: '',
+        dpp: '',
+        kawin: '',
+        agama: '',
+        pers_tl: '           ',
+        mkg: '',
+        tmt_kgb: '',
+        stat_tunjab: '',
+        tmt_jab: '',
+        grade: '',
+        tk_papua: '',
+        tk_terluar: '',
+        tk_terpencil: '',
+        persekot: '',
+        gantirugi: '',
+        sewarumah: '',
+        stat_sandi: '',
+        eselon_sandi: '',
+        tmt_sandi: '',
+        rek: ''
     })
 
 
@@ -49,7 +49,7 @@ export const View = () => {
         document.getElementById('btn-perubahan').classList.add('sidebar-active')
         document.getElementById('btn-tambah').classList.remove('sidebar-active')
 
-        function dataDropdown() {
+        function ambildataDropdown() {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataDropdown`)
                 .then(function (response) {
                     if (response.status == 200) {
@@ -62,7 +62,11 @@ export const View = () => {
                             stringSatker += `<option value='${value.satker_id}'>${value.satker_label}</option>`
                         });
                         document.getElementById('satker').innerHTML = stringSatker
-
+                        var stringPangkat = ''
+                        Object.entries(response.data.pangkat).forEach(([key, value]) => {
+                            stringPangkat += `<option value='${value.pangkat_id}'>${value.pangkat_label}</option>`
+                        });
+                        document.getElementById('pangkat').innerHTML = stringPangkat
                     } else {
                         console.log('Tidak berhasil mengambil postingan')
                         return
@@ -75,32 +79,72 @@ export const View = () => {
 
         }
 
-        dataDropdown()
+        ambildataDropdown()
 
         const queryString = window.location.search;
         console.log(queryString);
         const urlParams = new URLSearchParams(queryString);
         const pers_id = urlParams.get('id')
         console.log(pers_id);
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/view`, {
-            pers_id:pers_id,
-        })
-            .then(async function (response) {
-                if (response.status == 200) {
-                    const detail_pers = response.data['0']
-                    console.log(detail_pers)
-                    setDataPers(detail_pers)
-                    document.getElementById('nrp').value = detail_pers.pers_nrp
-                    document.getElementById('matra').value = detail_pers.pers_matra
-                } else {
-                    console.log('Tidak berhasil mengambil data personel')
-                    return
-                }
+        function ambildatapers(pers_id) {
+            axios.post(`${process.env.REACT_APP_BACKEND_URL}/view`, {
+                pers_id: pers_id,
             })
-            .catch(async function (error) {
-                console.log(error)
-                return
-            });
+                .then(async function (response) {
+                    if (response.status == 200) {
+                        const detail_pers = response.data['0']
+                        console.log(detail_pers)
+                        setDataPers(detail_pers)
+                        document.getElementById('satker').value = detail_pers.pers_satker
+                        document.getElementById('kawin').value = detail_pers.pers_kawin
+                        document.getElementById('mkg').value = detail_pers.pers_mkg
+                        document.getElementById('tmt_kgb').value = detail_pers.pers_tmt_kgb.slice(0, 10)
+                        document.getElementById('stat_tunjab').value = detail_pers.pers_stat_tunjab
+                        document.getElementById('tmt_jab').value = detail_pers.pers_tmt_jab.slice(0, 10)
+                        document.getElementById('grade').value = detail_pers.pers_grade
+                        document.getElementById('tk_papua').value = detail_pers.pers_tk_papua
+                        document.getElementById('tk_terluar').value = detail_pers.pers_tk_terluar
+                        document.getElementById('tk_terpencil').value = detail_pers.pers_tk_terpencil
+                        document.getElementById('persekot').value = detail_pers.pers_persekot
+                        document.getElementById('gantirugi').value = detail_pers.pers_gantirugi
+                        document.getElementById('sewarumah').value = detail_pers.pers_sewarumah
+                        document.getElementById('stat_sandi').value = detail_pers.pers_stat_sandi
+                        document.getElementById('eselon_sandi').value = detail_pers.pers_eselon_sandi
+                        document.getElementById('tmt_sandi').value = detail_pers.pers_tmt_sandi
+                        document.getElementById('rek').value = detail_pers.pers_rek
+                        document.getElementById('pangkat').value = detail_pers.pers_pangkat
+                        var stringPangkat = ''
+                        console.log('ini sebelum object 85')
+                        console.log(dataDropdown)
+                        /*Object.entries(dataDropdown.pangkat).forEach(([key, value]) => {
+                            console.log('sebelum if')
+                            if (detail_pers.pers_korps > 85) {
+                                console.log('lebih 85')
+                                if (value.pangkat_korps == detail_pers.pers_korps) {
+                                    stringPangkat += `<option value='${value.pangkat_id}'>${value.pangkat_label}</option>`
+                                }
+                            } else {
+                                console.log('ini adalah else 85')
+                                if (value.pangkat_matra == detail_pers.pers_matra && value.pangkat_korps == null) {
+                                    stringPangkat += `<option value='${value.pangkat_id}'>${value.pangkat_label}</option>`
+                                }
+                            }
+
+                        });*/
+                        //document.getElementById('pangkat').innerHTML = stringPangkat
+                    } else {
+                        console.log('Tidak berhasil mengambil data personel')
+                        return
+                    }
+                })
+                .catch(async function (error) {
+                    console.log(error)
+                    return
+                });
+        }
+
+        ambildatapers(pers_id)
+
     }, [])
 
 
@@ -273,64 +317,67 @@ export const View = () => {
                     <div className='bg-putihdikit rounded-2 p-3 border border-3'>
                         <h5>Profil Personel</h5>
                         <form onSubmit={handleSubmit} className='font-poppins' id='formTambah' name='formTambah'>
-                            <div className='py-3'>
-                                <div className='row py-2'>
-                                    <div class="col-12 col-md-4">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>NRP/NIP</small></label>
-                                        <input type="text" class="form-control border border-3" id="nrp" name='nrp' placeholder="" />
-                                    </div>
-                                </div>
-                                <div className='row'>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Matra/Pegawai</small></label>
-                                        <select id='matra' name='matra' onChange={() => { changeMatra() }} class="form-select border border-3" aria-label="Default select example">
-                                            <option value=""></option>
-                                            <option value="1">TNI AD</option>
-                                            <option value="2">TNI AL</option>
-                                            <option value="3">TNI AU</option>
-                                            <option value="0">PNS</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Korps</small></label>
-                                        <select id='korps' name='korps' onChange={() => { changeKorps() }} class="form-select border border-3" aria-label="Default select example">
-
-                                        </select>
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Pangkat/Golongan</small></label>
+                            <table className='mt-4 w-100'>
+                                <tr className='row my-1'>
+                                    <th className='col-4'>NRP/NIP</th>
+                                    <td className='col-8'>: {dataPers.pers_nrp}</td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <th className='col-4'>Nama</th>
+                                    <td className='col-8'>: {dataPers.pers_nama}</td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <th className='col-4'>Jenis Kelamin</th>
+                                    <td className='col-8'>: {dataPers.pers_gender}</td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <th className='col-4'>Tanggal Lahir</th>
+                                    <td className='col-8'>: {dataPers.pers_tl.slice(8, 10) + ' ' + dataPers.pers_tl.slice(5, 7) + ' ' + dataPers.pers_tl.slice(0, 4)}</td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <th className='col-4'>Agama</th>
+                                    <td className='col-8'>: {dataPers.ag_label}</td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <th className='col-4'>Matra</th>
+                                    <td className='col-8'>: {dataPers.matra_label}</td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <th className='col-4'>Korps</th>
+                                    <td className='col-8'>: {dataPers.korps_label}</td>
+                                </tr>
+                                <tr>
+                                    <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Perubahan Data Diri</strong></p>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>Pangkat/Golongan</td>
+                                    <td className='col-12 col-md-8'>
                                         <select id='pangkat' name='pangkat' class="form-select border border-3" aria-label="Default select example">
 
                                         </select>
-                                    </div>
-                                </div>
-                                <div className='row'>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Kelompok DPP</small></label>
+                                    </td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>Satker/Subsatker</td>
+                                    <td className='col-12 col-md-8'>
+                                        <select id='satker' name='satker' onChange={() => { changeSatker() }} class="form-select border border-3" aria-label="Default select example">
+
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>Kelompok DPP</td>
+                                    <td className='col-12 col-md-8'>
                                         <select id='dpp' name='dpp' class="form-select border border-3" aria-label="Default select example">
                                             <option value="1">1</option>
                                             <option value="2">2</option>
                                             <option value="3">3</option>
                                         </select>
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Satker/Subsatker</small></label>
-                                        <select id='satker' name='satker' onChange={() => { changeSatker() }} class="form-select border border-3" aria-label="Default select example">
-
-                                        </select>
-                                    </div>
-                                </div>
-                                <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Data Diri</strong></p>
-                                <div className='row'>
-                                    <div class="col-12 col-md-8">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Nama Lengkap</small></label>
-                                        <input type="text" class="form-control border border-3" id="nama" name='nama' placeholder="" />
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Status Kawin</small></label>
+                                    </td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>Status Kawin</td>
+                                    <td className='col-12 col-md-8'>
                                         <select id='kawin' name='kawin' class="form-select border border-3">
                                             <option value=""></option>
                                             <option value="1">TK/0</option>
@@ -346,69 +393,56 @@ export const View = () => {
                                             <option value="11">K/1/2</option>
                                             <option value="12">K/1/3</option>
                                         </select>
-                                    </div>
-                                </div>
-                                <div className='row'>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Jenis Kelamin</small></label>
-                                        <select id='gender' name='gender' class="form-select border border-3" aria-label="Default select example">
-                                            <option value="Pria">Pria</option>
-                                            <option value="Wanita">Wanita</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Tanggal Lahir</small></label>
-                                        <input type="date" class="form-control border border-3" id="tl" name='tl' placeholder="" />
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Agama</small></label>
-                                        <select id='agama' name='agama' class="form-select border border-3" aria-label="Default select example">
-                                            <option value=""></option>
-                                            <option value="1">Islam</option>
-                                            <option value="2">Kristen</option>
-                                            <option value="3">Katholik</option>
-                                            <option value="4">Hindu</option>
-                                            <option value="5">Buddha</option>
-                                            <option value="6">Konghucu</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Status Gaji</strong></p>
-                                <div className='row'>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Masa Kerja Gaji (MKG)</small></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Perubahan Status Gaji</strong></p>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>Masa Kerja Gaji (MKG)</td>
+                                    <td className='col-12 col-md-8'>
                                         <input type="number" step='1' class="form-control border border-3" id="mkg" name='mkg' placeholder="" />
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>TMT Kenaikan Gaji Berkala (KGB)</small></label>
+                                    </td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>TMT Kenaikan Gaji Berkala (KGB)</td>
+                                    <td className='col-12 col-md-8'>
                                         <input type="date" class="form-control border border-3" id="tmt_kgb" name='tmt_kgb' placeholder="" />
-                                    </div>
-                                </div>
-                                <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Status Jabatan</strong></p>
-                                <div className='row'>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Status Tunjangan Jabatan</small></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Perubahan Status Jabatan</strong></p>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>Status Tunjangan Jabatan</td>
+                                    <td className='col-12 col-md-8'>
                                         <select id='stat_tunjab' name='stat_tunjab' class="form-select border border-3" aria-label="Default select example">
                                             <option value=""></option>
                                             <option value="1">Berhak</option>
                                             <option value="0">Tidak Berhak</option>
                                         </select>
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Jabatan</small></label>
+                                    </td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>Jabatan</td>
+                                    <td className='col-12 col-md-8'>
                                         <select id='jabatan' name='jabatan' class="form-select border border-3" aria-label="Default select example">
 
                                         </select>
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>TMT Jabatan</small></label>
+                                    </td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>TMT Jabatan</td>
+                                    <td className='col-12 col-md-8'>
                                         <input type="date" class="form-control border border-3" id="tmt_jab" name='tmt_jab' placeholder="" />
-                                    </div>
-                                </div>
-                                <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Kinerja</strong></p>
-                                <div className='row'>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Grade Jabatan Kinerja</small></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Perubahan Grade Kinerja</strong></p>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>Grade Jabatan Kinerja</td>
+                                    <td className='col-12 col-md-8'>
                                         <select id='grade' name='grade' class="form-select border border-3" aria-label="Default select example">
                                             <option value=""></option>
                                             <option value="1">1</option>
@@ -432,9 +466,9 @@ export const View = () => {
                                             <option value="19">19</option>
                                             <option value="20">20</option>
                                         </select>
-                                    </div>
-                                </div>
-                                <div className='row'>
+                                    </td>
+                                </tr>
+                                <tr className='row my-1'>
                                     <div class="col-12 col-md-4 py-1">
                                         <input class="form-check-input border border-3 p-2" type="checkbox" value="1" id="tk_papua" name='tk_papua' />
                                         <label class="form-check-label p-1 ps-2" for="flexCheckDefault">
@@ -453,34 +487,44 @@ export const View = () => {
                                             Tunjangan Khusus Terluar
                                         </label>
                                     </div>
-                                </div>
-                                <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Potongan</strong></p>
-                                <div className='row'>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Potongan Persekot/Uang Muka Gaji</small></label>
+                                </tr>
+                                <tr>
+                                    <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Potongan</strong></p>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>Persekot</td>
+                                    <td className='col-12 col-md-8'>
                                         <input type="number" class="form-control border border-3" id="persekot" name='persekot' placeholder="" />
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Potongan Ganti Rugi</small></label>
+                                    </td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>Ganti Rugi</td>
+                                    <td className='col-12 col-md-8'>
                                         <input type="number" class="form-control border border-3" id="gantirugi" name='gantirugi' placeholder="" />
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Potongan Sewa Rumah</small></label>
+                                    </td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>Sewa Rumah</td>
+                                    <td className='col-12 col-md-8'>
                                         <input type="number" class="form-control border border-3" id="sewarumah" name='sewarumah' placeholder="" />
-                                    </div>
-                                </div>
-                                <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Kompensasi Sandi (jika ada)</strong></p>
-                                <div className='row'>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Status Kompensasi Sandi</small></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Kompensasi Sandi (jika ada)</strong></p>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>Status Kompensasi Sandi</td>
+                                    <td className='col-12 col-md-8'>
                                         <select id='stat_sandi' name='stat_sandi' class="form-select border border-3" aria-label="Default select example">
                                             <option value=""></option>
                                             <option value="1">Berhak</option>
                                             <option value="0">Tidak Berhak</option>
                                         </select>
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Eselon Kompensasi Sandi</small></label>
+                                    </td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>Eselon Kompensasi Sandi</td>
+                                    <td className='col-12 col-md-8'>
                                         <select id='eselon_sandi' name='eselon_sandi' class="form-select border border-3" aria-label="Default select example">
                                             <option value=""></option>
                                             <option value="1">Pengamanan Persandian Tingkat I</option>
@@ -491,23 +535,24 @@ export const View = () => {
                                             <option value="6">Pengamanan Persandian Tingkat VI</option>
                                             <option value="7">Pengamanan Persandian Tingkat VII</option>
                                         </select>
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>TMT Kompensasi Sandi</small></label>
+                                    </td>
+                                </tr>
+                                <tr className='row my-1'>
+                                    <td className='col-12 col-md-4'>TMT Kompensasi Sandi</td>
+                                    <td className='col-12 col-md-8'>
                                         <input type="date" class="form-control border border-3" id="tmt_sandi" name='tmt_sandi' placeholder="" />
-                                    </div>
-                                </div>
-                                <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Jenis Rekening</strong></p>
-                                <div className='row'>
-                                    <div class="col-12 col-md-4 py-1">
+                                    </td>
+                                </tr>
+                                <tr className='row my-1 mt-4'>
+                                    <th className='col-12 col-md-4'>Jenis Rekening</th>
+                                    <td className='col-12 col-md-8'>
                                         <select id='rek' name='rek' class="form-select border border-3" aria-label="Default select example">
                                             <option value=""></option>
                                             <option value="1">BNI</option>
                                             <option value="2">BRI</option>
                                         </select>
-                                    </div>
-
-                                </div>
+                                    </td>
+                                </tr>
                                 <div className='row'>
                                     <div className='d-none d-md-block col-md-4'></div>
                                     <div className='d-none d-md-block col-md-4'></div>
@@ -550,7 +595,7 @@ export const View = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </table>
                         </form>
                     </div>
                 </div>
