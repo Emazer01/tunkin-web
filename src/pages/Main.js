@@ -55,6 +55,8 @@ export const Main = () => {
         document.getElementById('btn-beranda').classList.add('sidebar-active')
         document.getElementById('btn-perubahan').classList.remove('sidebar-active')
         document.getElementById('btn-tambah').classList.remove('sidebar-active')
+        document.getElementById('btn-cetak').classList.remove('sidebar-active')
+
         function dataLog() {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataLog`)
                 .then(function (response) {
@@ -123,7 +125,10 @@ export const Main = () => {
                         </div>
                     </div>
                     <div className='bg-putihdikit rounded-2 p-3 my-3 border border-3'>
-                        <h5>Riwayat Perubahan</h5>
+                        <div className='row'>
+                            <h5 className='col-6'>Riwayat Perubahan</h5>
+                            <a href='/log' className='col-6 text-end text-dark'>Lihat Semua</a>
+                        </div>
                         <div className='px-2'>
                             <div className='row mt-3 border-2 border-bottom'>
                                 <p className='col-6 col-md-3 border-2 border-end py-1 m-0'><strong>Nama</strong></p>

@@ -48,7 +48,8 @@ export const View = () => {
         document.getElementById('btn-beranda').classList.remove('sidebar-active')
         document.getElementById('btn-perubahan').classList.add('sidebar-active')
         document.getElementById('btn-tambah').classList.remove('sidebar-active')
-
+        document.getElementById('btn-cetak').classList.remove('sidebar-active')
+        /*
         function ambildataDropdown() {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataDropdown`)
                 .then(function (response) {
@@ -80,27 +81,66 @@ export const View = () => {
         }
 
         ambildataDropdown()
+        */
 
         const queryString = window.location.search;
         console.log(queryString);
         const urlParams = new URLSearchParams(queryString);
         const pers_id = urlParams.get('id')
         console.log(pers_id);
-        function ambildatapers(pers_id) {
-            axios.post(`${process.env.REACT_APP_BACKEND_URL}/view`, {
+        async function ambildatapers(pers_id) {
+            await axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataDropdown`)
+                .then(async function (response) {
+                    if (response.status == 200) {
+                        await setDataDropdown(response.data)
+                        //satker
+                        var stringSatker = ''
+                        stringSatker += `<option value=''></option>`
+                        Object.entries(response.data.satker).forEach(([key, value]) => {
+                            stringSatker += `<option value='${value.satker_id}'>${value.satker_label}</option>`
+                        });
+                        document.getElementById('satker').innerHTML = stringSatker
+                        var stringPangkat = ''
+                        Object.entries(response.data.pangkat).forEach(([key, value]) => {
+                            stringPangkat += `<option value='${value.pangkat_id}'>${value.pangkat_label}</option>`
+                        });
+                        document.getElementById('pangkat').innerHTML = stringPangkat
+                        var stringJabatan = ''
+                        stringJabatan += `<option value=''></option>`
+                        Object.entries(response.data.jabatan).forEach(([key, value]) => {
+                            stringJabatan += `<option value='${value.jab_id}'>${value.jab_label}</option>`
+                        });
+                        document.getElementById('jabatan').innerHTML = stringJabatan
+                    } else {
+                        console.log('Tidak berhasil mengambil postingan')
+                        return
+                    }
+                })
+                .catch(async function (error) {
+                    console.log(error)
+                    return
+                });
+
+            sleep(500)
+
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}/view`, {
                 pers_id: pers_id,
             })
                 .then(async function (response) {
                     if (response.status == 200) {
                         const detail_pers = response.data['0']
-                        console.log(detail_pers)
                         setDataPers(detail_pers)
-                        document.getElementById('satker').value = detail_pers.pers_satker
+                        console.log(detail_pers.pers_tmt_jab)
+                        document.title = 'Pusinfolahta TNI | Tunjangan Kinerja | ' + detail_pers.pers_nama
                         document.getElementById('kawin').value = detail_pers.pers_kawin
                         document.getElementById('mkg').value = detail_pers.pers_mkg
                         document.getElementById('tmt_kgb').value = detail_pers.pers_tmt_kgb.slice(0, 10)
                         document.getElementById('stat_tunjab').value = detail_pers.pers_stat_tunjab
-                        document.getElementById('tmt_jab').value = detail_pers.pers_tmt_jab.slice(0, 10)
+                        if (detail_pers.pers_tmt_jab == null) {
+                            document.getElementById("tmt_jab").value = detail_pers.pers_tmt_jab;
+                        } else {
+                            document.getElementById("tmt_jab").value = detail_pers.pers_tmt_jab.slice(0, 10);
+                        }
                         document.getElementById('grade').value = detail_pers.pers_grade
                         document.getElementById('tk_papua').value = detail_pers.pers_tk_papua
                         document.getElementById('tk_terluar').value = detail_pers.pers_tk_terluar
@@ -112,26 +152,11 @@ export const View = () => {
                         document.getElementById('eselon_sandi').value = detail_pers.pers_eselon_sandi
                         document.getElementById('tmt_sandi').value = detail_pers.pers_tmt_sandi
                         document.getElementById('rek').value = detail_pers.pers_rek
+                        document.getElementById('satker').value = detail_pers.pers_satker
+                        console.log(dataDropdown.pangkat)
                         document.getElementById('pangkat').value = detail_pers.pers_pangkat
-                        var stringPangkat = ''
-                        console.log('ini sebelum object 85')
-                        console.log(dataDropdown)
-                        /*Object.entries(dataDropdown.pangkat).forEach(([key, value]) => {
-                            console.log('sebelum if')
-                            if (detail_pers.pers_korps > 85) {
-                                console.log('lebih 85')
-                                if (value.pangkat_korps == detail_pers.pers_korps) {
-                                    stringPangkat += `<option value='${value.pangkat_id}'>${value.pangkat_label}</option>`
-                                }
-                            } else {
-                                console.log('ini adalah else 85')
-                                if (value.pangkat_matra == detail_pers.pers_matra && value.pangkat_korps == null) {
-                                    stringPangkat += `<option value='${value.pangkat_id}'>${value.pangkat_label}</option>`
-                                }
-                            }
+                        document.getElementById('jabatan').value = detail_pers.pers_jabatan
 
-                        });*/
-                        //document.getElementById('pangkat').innerHTML = stringPangkat
                     } else {
                         console.log('Tidak berhasil mengambil data personel')
                         return
@@ -146,20 +171,6 @@ export const View = () => {
         ambildatapers(pers_id)
 
     }, [])
-
-
-    const changeMatra = () => {
-        const matra = document.getElementById('matra').value
-        var stringKorps = ''
-        stringKorps += `<option value=''></option>`
-        Object.entries(dataDropdown.korps).forEach(([key, value]) => {
-            if (value.korps_matra == matra) {
-                stringKorps += `<option value='${value.korps_id}'>${value.korps_label}</option>`
-            }
-
-        });
-        document.getElementById('korps').innerHTML = stringKorps
-    }
 
     const changeSatker = () => {
         const satker = document.getElementById('satker').value
@@ -193,22 +204,38 @@ export const View = () => {
         document.getElementById('pangkat').innerHTML = stringPangkat
     }
 
+    const resetForm = () => {
+        document.getElementById('kawin').value = dataPers.pers_kawin
+        document.getElementById('mkg').value = dataPers.pers_mkg
+        document.getElementById('tmt_kgb').value = dataPers.pers_tmt_kgb.slice(0, 10)
+        document.getElementById('stat_tunjab').value = dataPers.pers_stat_tunjab
+        document.getElementById('tmt_jab').value = dataPers.pers_tmt_jab.slice(0, 10)
+        document.getElementById('grade').value = dataPers.pers_grade
+        document.getElementById('tk_papua').value = dataPers.pers_tk_papua
+        document.getElementById('tk_terluar').value = dataPers.pers_tk_terluar
+        document.getElementById('tk_terpencil').value = dataPers.pers_tk_terpencil
+        document.getElementById('persekot').value = dataPers.pers_persekot
+        document.getElementById('gantirugi').value = dataPers.pers_gantirugi
+        document.getElementById('sewarumah').value = dataPers.pers_sewarumah
+        document.getElementById('stat_sandi').value = dataPers.pers_stat_sandi
+        document.getElementById('eselon_sandi').value = dataPers.pers_eselon_sandi
+        document.getElementById('tmt_sandi').value = dataPers.pers_tmt_sandi
+        document.getElementById('rek').value = dataPers.pers_rek
+        document.getElementById('satker').value = dataPers.pers_satker
+        document.getElementById('pangkat').value = dataPers.pers_pangkat
+        document.getElementById('jabatan').value = dataPers.pers_jabatan
+    }
+
     const handleSubmit = async (event) => {
         document.getElementById('submitData-loading').classList.remove('d-none')
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        const nrp = data.get('nrp')
-        const nama = data.get('nama')
-        const gender = data.get('gender')
-        const matra = data.get('matra')
+        const id = dataPers.pers_id
         const pangkat = data.get('pangkat')
-        const korps = data.get('korps')
-        const jabatan = data.get('jabatan')
+        var jabatan = data.get('jabatan')
         const satker = data.get('satker')
         const dpp = data.get('dpp')
         const kawin = data.get('kawin')
-        const agama = data.get('agama')
-        const tl = data.get('tl')
         const mkg = data.get('mkg')
         const tmt_kgb = data.get('tmt_kgb')
         const stat_tunjab = data.get('stat_tunjab')
@@ -225,6 +252,9 @@ export const View = () => {
         var tmt_sandi = data.get('tmt_sandi')
         const rek = data.get('rek')
 
+        if (jabatan == "") {
+            jabatan = null
+        }
         if (tmt_jab == "") {
             tmt_jab = null
         }
@@ -244,34 +274,11 @@ export const View = () => {
             tk_terpencil = 0
         }
 
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/tambah`, {
-            nrp,
-            nama,
-            gender,
-            matra,
-            pangkat,
-            korps,
-            jabatan,
-            satker,
-            dpp,
-            kawin,
-            agama,
-            tl,
-            mkg,
-            tmt_kgb,
-            stat_tunjab,
-            tmt_jab,
-            grade,
-            tk_papua,
-            tk_terluar,
-            tk_terpencil,
-            persekot,
-            gantirugi,
-            sewarumah,
-            stat_sandi,
-            eselon_sandi,
-            tmt_sandi,
-            rek
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/update`, {
+            id, pangkat, jabatan, satker, dpp,
+            kawin, mkg, tmt_kgb, stat_tunjab, tmt_jab,
+            grade, tk_papua, tk_terluar, tk_terpencil, persekot,
+            gantirugi, sewarumah, stat_sandi, eselon_sandi, tmt_sandi, rek
         })
             .then(async function (response) {
                 if (response.status == 200) {
@@ -360,7 +367,7 @@ export const View = () => {
                                 <tr className='row my-1'>
                                     <td className='col-12 col-md-4'>Satker/Subsatker</td>
                                     <td className='col-12 col-md-8'>
-                                        <select id='satker' name='satker' onChange={() => { changeSatker() }} class="form-select border border-3" aria-label="Default select example">
+                                        <select id='satker' name='satker' class="form-select border border-3" aria-label="Default select example">
 
                                         </select>
                                     </td>
@@ -588,7 +595,7 @@ export const View = () => {
                                             <a type="button" href='/' class="w-100 btn btn-danger">Batal</a>
                                         </div>
                                         <div className='col-12 col-md-4 p-2'>
-                                            <button type="button" onClick={() => { document.getElementById('formTambah').reset() }} class="w-100 btn btn-warning text-white">Hapus Form</button>
+                                            <button type="button" onClick={() => { resetForm() }} class="w-100 btn btn-warning text-white">Reset Form</button>
                                         </div>
                                         <div className='col-12 col-md-4 p-2'>
                                             <button type="submit" class="w-100 btn btn-success">Rekam</button>

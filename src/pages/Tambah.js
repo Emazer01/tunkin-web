@@ -19,6 +19,7 @@ export const Tambah = () => {
         document.getElementById('btn-beranda').classList.remove('sidebar-active')
         document.getElementById('btn-perubahan').classList.remove('sidebar-active')
         document.getElementById('btn-tambah').classList.add('sidebar-active')
+        document.getElementById('btn-cetak').classList.remove('sidebar-active')
 
         function dataDropdown() {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataDropdown`)
@@ -108,7 +109,7 @@ export const Tambah = () => {
         const matra = data.get('matra')
         const pangkat = data.get('pangkat')
         const korps = data.get('korps')
-        const jabatan = data.get('jabatan')
+        var jabatan = data.get('jabatan')
         const satker = data.get('satker')
         const dpp = data.get('dpp')
         const kawin = data.get('kawin')
@@ -130,6 +131,9 @@ export const Tambah = () => {
         var tmt_sandi = data.get('tmt_sandi')
         const rek = data.get('rek')
 
+        if (jabatan == "") {
+            jabatan = null
+        }
         if (tmt_jab == "") {
             tmt_jab = null
         }

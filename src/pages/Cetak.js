@@ -1,8 +1,11 @@
 import { Sidebar } from '../component/Sidebar';
 import * as React from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-export const Perubahan = () => {
+export const Cetak = () => {
+    const navigate = useNavigate()
+    const date = Date()
     const [recent, setRecent] = React.useState(
         [{
             nrp: 123456,
@@ -10,13 +13,13 @@ export const Perubahan = () => {
             pangkat: 'Sersan Mayor Satu Kadet',
             satker: 'Resimen Korps Kadet Mahasiswa',
             jabatan: 'Komandan Batalyon Korps Tk 2'
-        }]
-    )
+        }])
+
     React.useEffect(() => {
         document.getElementById('btn-beranda').classList.remove('sidebar-active')
-        document.getElementById('btn-perubahan').classList.add('sidebar-active')
+        document.getElementById('btn-perubahan').classList.remove('sidebar-active')
         document.getElementById('btn-tambah').classList.remove('sidebar-active')
-        document.getElementById('btn-cetak').classList.remove('sidebar-active')
+        document.getElementById('btn-cetak').classList.add('sidebar-active')
 
         function dataPers() {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataPers`)
@@ -52,6 +55,12 @@ export const Perubahan = () => {
 
     }, [])
 
+    function sleep(ms) {
+        return new Promise(
+            resolve => setTimeout(resolve, ms)
+        );
+    }
+
     const changeFind = () => {
         var find = document.getElementById('find').value
         console.log(find)
@@ -78,15 +87,15 @@ export const Perubahan = () => {
             <Sidebar />
             <div className='w-100'>
                 <div className='fs-4 fw-medium font-poppins bg-putihdikit p-2 ps-3 border-bottom border-4'>
-                    Perubahan
+                    Cetak
                 </div>
                 <div className='p-3 p-md-5'>
                     <div className='bg-putihdikit rounded-2 p-3 border border-3'>
                         <div className='row'>
-                            <div className='col-12 col-md-3'>
-                                <a href='/log' type="button" class="btn btn-secondary w-100 mb-2">Riwayat Perubahan</a>
+                            <div className='col-12 col-md-2'>
+                                <button type="button" class="btn btn-success w-100 mb-2">Cetak Laporan</button>
                             </div>
-                            <div className='col-12 col-md-9'>
+                            <div className='col-12 col-md-10'>
                                 <div class="input-group">
                                     <span class="input-group-text">Cari Nama</span>
                                     <input type="text" onChange={() => { changeFind() }} id='find' class="form-control bg-putihdikit" placeholder="" aria-label="Recipient's username" aria-describedby="button-addon2" />

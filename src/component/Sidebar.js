@@ -29,6 +29,12 @@ export const Sidebar = () => {
                         <span className='px-1 col-md-10 d-none d-md-block p-2'>Tambah</span>
                     </a>
                 </li>
+                <li className='my-1'>
+                    <a href="/cetak" id='btn-cetak' class="sidebar-link p-2 rounded-2 text-decoration-none font-poppins text-white row">
+                        <i class="bi bi-printer-fill col-12 col-md-2 p-0 text-center fs-4" />
+                        <span className='px-1 col-md-10 d-none d-md-block p-2'>Cetak</span>
+                    </a>
+                </li>
             </ul>
         </div>
     )
