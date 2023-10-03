@@ -63,7 +63,10 @@
 .font-poppins{
   font-family: 'Poppins', sans-serif;
 }
-
+.font-size{
+  font-size: 14.5px;
+}
+.pagebreak { page-break-before: always; }
 .sidebar-link{
   transition: 0.15s;
 }

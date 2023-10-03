@@ -35,6 +35,12 @@ export const Sidebar = () => {
                         <span className='px-1 col-md-10 d-none d-md-block p-2'>Cetak</span>
                     </a>
                 </li>
+                <li className='my-1'>
+                    <a href="/index" id='btn-index' class="sidebar-link p-2 rounded-2 text-decoration-none font-poppins text-white row">
+                        <i class="bi bi-file-text-fill col-12 col-md-2 p-0 text-center fs-4" />
+                        <span className='px-1 col-md-10 d-none d-md-block p-2'>Index</span>
+                    </a>
+                </li>
             </ul>
         </div>
     )

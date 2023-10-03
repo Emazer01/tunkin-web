@@ -56,6 +56,7 @@ export const Main = () => {
         document.getElementById('btn-perubahan').classList.remove('sidebar-active')
         document.getElementById('btn-tambah').classList.remove('sidebar-active')
         document.getElementById('btn-cetak').classList.remove('sidebar-active')
+        document.getElementById('btn-index').classList.remove('sidebar-active')
 
         function dataLog() {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataLog`)

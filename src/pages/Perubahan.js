@@ -17,6 +17,7 @@ export const Perubahan = () => {
         document.getElementById('btn-perubahan').classList.add('sidebar-active')
         document.getElementById('btn-tambah').classList.remove('sidebar-active')
         document.getElementById('btn-cetak').classList.remove('sidebar-active')
+        document.getElementById('btn-index').classList.remove('sidebar-active')
 
         function dataPers() {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataPers`)

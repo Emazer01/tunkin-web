@@ -20,6 +20,7 @@ export const Tambah = () => {
         document.getElementById('btn-perubahan').classList.remove('sidebar-active')
         document.getElementById('btn-tambah').classList.add('sidebar-active')
         document.getElementById('btn-cetak').classList.remove('sidebar-active')
+        document.getElementById('btn-index').classList.remove('sidebar-active')
 
         function dataDropdown() {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataDropdown`)
@@ -261,9 +262,8 @@ export const Tambah = () => {
                                     <div class="col-12 col-md-4 py-1">
                                         <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Kelompok DPP</small></label>
                                         <select id='dpp' name='dpp' class="form-select border border-3" aria-label="Default select example">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
+                                            <option value="1">TNI</option>
+                                            <option value="2">PNS</option>
                                         </select>
                                     </div>
                                     <div class="col-12 col-md-4 py-1">
@@ -286,18 +286,15 @@ export const Tambah = () => {
                                         <label for="exampleFormControlInput1" class="form-label mb-0 ps-1"><small>Status Kawin</small></label>
                                         <select id='kawin' name='kawin' class="form-select border border-3">
                                             <option value=""></option>
-                                            <option value="1">TK/0</option>
-                                            <option value="2">TK/1</option>
-                                            <option value="3">TK/2</option>
-                                            <option value="4">TK/3</option>
-                                            <option value="5">K/0</option>
-                                            <option value="6">K/1</option>
-                                            <option value="7">K/2</option>
-                                            <option value="8">K/3</option>
+                                            <option value="1">T0/0</option>
+                                            <option value="2">T0/1</option>
+                                            <option value="3">T0/2</option>
+                                            <option value="5">K0/1</option>
+                                            <option value="6">K1/2</option>
+                                            <option value="7">K2/3</option>
                                             <option value="9">K/1/0</option>
                                             <option value="10">K/1/1</option>
                                             <option value="11">K/1/2</option>
-                                            <option value="12">K/1/3</option>
                                         </select>
                                     </div>
                                 </div>

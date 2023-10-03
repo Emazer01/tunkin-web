@@ -7,6 +7,8 @@ import { Tambah } from './pages/Tambah';
 import { View } from './pages/View';
 import { Cetak } from './pages/Cetak';
 import { Log } from './pages/Log';
+import { Satker } from './pages/Satker';
+import { Index } from './pages/Index';
 
 function App() {
   return (
@@ -17,7 +19,9 @@ function App() {
         <Route path="/tambah" element={<Tambah />}></Route>
         <Route path="/view" element={<View />}></Route>
         <Route path="/cetak" element={<Cetak />}></Route>
+        <Route path="/cetak/satker" element={<Satker />}></Route>
         <Route path="/log" element={<Log />}></Route>
+        <Route path="/index" element={<Index />}></Route>
       </Routes>
     </BrowserRouter>
   );

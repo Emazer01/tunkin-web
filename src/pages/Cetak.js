@@ -6,6 +6,13 @@ import { useNavigate } from 'react-router-dom';
 export const Cetak = () => {
     const navigate = useNavigate()
     const date = Date()
+    const [dataDropdown, setDataDropdown] = React.useState({
+        jabatan: '',
+        korps: '',
+        matra: '',
+        pangkat: '',
+        satker: { a: 'asd' }
+    })
     const [recent, setRecent] = React.useState(
         [{
             nrp: 123456,
@@ -20,6 +27,34 @@ export const Cetak = () => {
         document.getElementById('btn-perubahan').classList.remove('sidebar-active')
         document.getElementById('btn-tambah').classList.remove('sidebar-active')
         document.getElementById('btn-cetak').classList.add('sidebar-active')
+        document.getElementById('btn-index').classList.remove('sidebar-active')
+
+        function dataDropdown() {
+            axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataDropdown`)
+                .then(function (response) {
+                    if (response.status == 200) {
+                        console.log(response.data.jabatan)
+                        setDataDropdown(response.data)
+                        //satker
+                        var stringSatker = ''
+                        Object.entries(response.data.satker).forEach(([key, value]) => {
+                            stringSatker += `<option value='${value.satker_id}'>${value.satker_label}</option>`
+                        });
+                        document.getElementById('satker').innerHTML = stringSatker
+
+                    } else {
+                        console.log('Tidak berhasil mengambil postingan')
+                        return
+                    }
+                })
+                .catch(async function (error) {
+                    console.log(error)
+                    return
+                });
+
+        }
+
+        dataDropdown()
 
         function dataPers() {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataPers`)
@@ -54,6 +89,13 @@ export const Cetak = () => {
         dataPers()
 
     }, [])
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const satker = data.get('satker')
+        navigate(`satker/?id=${satker}`)
+    }
 
     function sleep(ms) {
         return new Promise(
@@ -91,16 +133,23 @@ export const Cetak = () => {
                 </div>
                 <div className='p-3 p-md-5'>
                     <div className='bg-putihdikit rounded-2 p-3 border border-3'>
-                        <div className='row'>
-                            <div className='col-12 col-md-2'>
-                                <button type="button" class="btn btn-success w-100 mb-2">Cetak Laporan</button>
-                            </div>
-                            <div className='col-12 col-md-10'>
-                                <div class="input-group">
-                                    <span class="input-group-text">Cari Nama</span>
-                                    <input type="text" onChange={() => { changeFind() }} id='find' class="form-control bg-putihdikit" placeholder="" aria-label="Recipient's username" aria-describedby="button-addon2" />
+                        <form onSubmit={handleSubmit}>
+                            <h5>Cetak Laporan Satker</h5>
+                            <div className='row'>
+                                <div className='col-12 col-md-9'>
+                                    <select id='satker' name='satker' class="form-select border border-3" aria-label="Default select example">
+
+                                    </select>
+                                </div>
+                                <div className='col-12 col-md-3'>
+                                    <button type="submit" class="btn btn-success w-100 mb-2">Cetak Laporan</button>
                                 </div>
                             </div>
+                        </form>
+                        <h5 className='mt-4'>Cetak Laporan Personel</h5>
+                        <div class="input-group">
+                            <span class="input-group-text">Cari Nama</span>
+                            <input type="text" onChange={() => { changeFind() }} id='find' class="form-control bg-putihdikit" placeholder="" aria-label="Recipient's username" aria-describedby="button-addon2" />
                         </div>
                         <div className='p-1 pt-3'>
                             <div className='row border-transparant border-2 border-bottom'>

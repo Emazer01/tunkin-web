@@ -49,6 +49,7 @@ export const View = () => {
         document.getElementById('btn-perubahan').classList.add('sidebar-active')
         document.getElementById('btn-tambah').classList.remove('sidebar-active')
         document.getElementById('btn-cetak').classList.remove('sidebar-active')
+        document.getElementById('btn-index').classList.remove('sidebar-active')
         /*
         function ambildataDropdown() {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataDropdown`)
@@ -142,6 +143,7 @@ export const View = () => {
                             document.getElementById("tmt_jab").value = detail_pers.pers_tmt_jab.slice(0, 10);
                         }
                         document.getElementById('grade').value = detail_pers.pers_grade
+                        document.getElementById('dpp').value = detail_pers.pers_dpp
                         document.getElementById('tk_papua').value = detail_pers.pers_tk_papua
                         document.getElementById('tk_terluar').value = detail_pers.pers_tk_terluar
                         document.getElementById('tk_terpencil').value = detail_pers.pers_tk_terpencil
@@ -307,6 +309,30 @@ export const View = () => {
             });
 
     }
+
+    const handleHapus = async() => {
+        const pers_id = dataPers.pers_id
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/hapus`, {
+            pers_id : pers_id
+        })
+            .then(async function (response) {
+                if (response.status == 200) {
+                    console.log("Data Delete Success")
+                    navigate('../')
+                } else {
+                    console.log("Data Delete Failed")
+
+                }
+            })
+            .catch(async function (error) {
+                document.getElementById('submitData-loading').classList.add('d-none')
+                document.getElementById('submitData-danger').classList.remove('d-none');
+                await sleep(2000);
+                document.getElementById('submitData-danger').classList.add('d-none')
+                //document.getElementById("submitChanges").classList.add('disabled')
+            });
+    }
+
     function sleep(ms) {
         return new Promise(
             resolve => setTimeout(resolve, ms)
@@ -376,9 +402,8 @@ export const View = () => {
                                     <td className='col-12 col-md-4'>Kelompok DPP</td>
                                     <td className='col-12 col-md-8'>
                                         <select id='dpp' name='dpp' class="form-select border border-3" aria-label="Default select example">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
+                                            <option value="1">TNI</option>
+                                            <option value="2">PNS</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -591,8 +616,31 @@ export const View = () => {
                                         </div>
                                     </div>
                                     <div className='col-12 col-md-7 row p-3'>
-                                        <div className='col-12 col-md-4 p-2'>
-                                            <a type="button" href='/' class="w-100 btn btn-danger">Batal</a>
+                                        <div className="col-12 col-md-4 p-2">
+                                            <button type="button" class="w-100 btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                Hapus Personel
+                                            </button>
+                                        </div>
+                                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" role="dialog">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="staticBackdropLabel">
+                                                            Hapus Personel
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">Yakin menghapus personel ini?</div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                            Batal
+                                                        </button>
+                                                        <button type="button" onClick={handleHapus} class="btn btn-danger" data-bs-dismiss="modal">
+                                                            Hapus
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className='col-12 col-md-4 p-2'>
                                             <button type="button" onClick={() => { resetForm() }} class="w-100 btn btn-warning text-white">Reset Form</button>
