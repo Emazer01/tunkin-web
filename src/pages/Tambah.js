@@ -225,7 +225,7 @@ export const Tambah = () => {
                 </div>
                 <div className='p-3 p-md-5'>
                     <div className='bg-putihdikit rounded-2 p-3 border border-3'>
-                        <h5>Profil Personel</h5>
+                        <h5>Profil Personel Baru</h5>
                         <form onSubmit={handleSubmit} className='font-poppins' id='formTambah' name='formTambah'>
                             <div className='py-3'>
                                 <div className='row py-2'>

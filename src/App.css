@@ -66,6 +66,11 @@
 .font-size{
   font-size: 14.5px;
 }
+
+#lapPers {
+  size: a4;
+  
+}
 .pagebreak { page-break-before: always; }
 .sidebar-link{
   transition: 0.15s;
