@@ -104,13 +104,13 @@ export const Cetak = () => {
     }
 
     const changeFind = () => {
-        var find = document.getElementById('find').value
+        var find = document.getElementById('find').value.toLowerCase();
         console.log(find)
         var stringRecent = ""
         for (let index = 0; index < recent.length; index++) {
             if (recent[index].pers_nama.toLowerCase().includes(find)) {
                 stringRecent +=
-                    `<a href='/view/?id=${recent[index].pers_id}' class='row btn btn-light d-flex p-0 rounded-0 text-start border-2 border-bottom'>
+                    `<a href='/cetak/personel/?id=${recent[index].pers_id}' class='row btn btn-light d-flex p-0 rounded-0 text-start border-2 border-bottom'>
                     <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${recent[index].pers_nrp}</small></p>
                     <p class='col-6 col-md-3 border-2 border-end py-1 m-0'><small>${recent[index].pers_nama}</small></p>
                     <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${recent[index].pangkat_label} ${recent[index].korps_kode}</small></p>

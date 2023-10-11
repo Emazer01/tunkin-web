@@ -50,39 +50,6 @@ export const View = () => {
         document.getElementById('btn-tambah').classList.remove('sidebar-active')
         document.getElementById('btn-cetak').classList.remove('sidebar-active')
         document.getElementById('btn-index').classList.remove('sidebar-active')
-        /*
-        function ambildataDropdown() {
-            axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataDropdown`)
-                .then(function (response) {
-                    if (response.status == 200) {
-                        console.log(response.data.jabatan)
-                        setDataDropdown(response.data)
-                        //satker
-                        var stringSatker = ''
-                        stringSatker += `<option value=''></option>`
-                        Object.entries(response.data.satker).forEach(([key, value]) => {
-                            stringSatker += `<option value='${value.satker_id}'>${value.satker_label}</option>`
-                        });
-                        document.getElementById('satker').innerHTML = stringSatker
-                        var stringPangkat = ''
-                        Object.entries(response.data.pangkat).forEach(([key, value]) => {
-                            stringPangkat += `<option value='${value.pangkat_id}'>${value.pangkat_label}</option>`
-                        });
-                        document.getElementById('pangkat').innerHTML = stringPangkat
-                    } else {
-                        console.log('Tidak berhasil mengambil postingan')
-                        return
-                    }
-                })
-                .catch(async function (error) {
-                    console.log(error)
-                    return
-                });
-
-        }
-
-        ambildataDropdown()
-        */
 
         const queryString = window.location.search;
         console.log(queryString);
@@ -131,7 +98,7 @@ export const View = () => {
                     if (response.status == 200) {
                         const detail_pers = response.data['0']
                         setDataPers(detail_pers)
-                        console.log(detail_pers.pers_tmt_jab)
+                        console.log(detail_pers)
                         document.title = 'Pusinfolahta TNI | Tunjangan Kinerja | ' + detail_pers.pers_nama
                         document.getElementById('kawin').value = detail_pers.pers_kawin
                         document.getElementById('mkg').value = detail_pers.pers_mkg
@@ -144,9 +111,6 @@ export const View = () => {
                         }
                         document.getElementById('grade').value = detail_pers.pers_grade
                         document.getElementById('dpp').value = detail_pers.pers_dpp
-                        document.getElementById('tk_papua').value = detail_pers.pers_tk_papua
-                        document.getElementById('tk_terluar').value = detail_pers.pers_tk_terluar
-                        document.getElementById('tk_terpencil').value = detail_pers.pers_tk_terpencil
                         document.getElementById('persekot').value = detail_pers.pers_persekot
                         document.getElementById('gantirugi').value = detail_pers.pers_gantirugi
                         document.getElementById('sewarumah').value = detail_pers.pers_sewarumah
@@ -213,9 +177,6 @@ export const View = () => {
         document.getElementById('stat_tunjab').value = dataPers.pers_stat_tunjab
         document.getElementById('tmt_jab').value = dataPers.pers_tmt_jab.slice(0, 10)
         document.getElementById('grade').value = dataPers.pers_grade
-        document.getElementById('tk_papua').value = dataPers.pers_tk_papua
-        document.getElementById('tk_terluar').value = dataPers.pers_tk_terluar
-        document.getElementById('tk_terpencil').value = dataPers.pers_tk_terpencil
         document.getElementById('persekot').value = dataPers.pers_persekot
         document.getElementById('gantirugi').value = dataPers.pers_gantirugi
         document.getElementById('sewarumah').value = dataPers.pers_sewarumah
@@ -243,9 +204,6 @@ export const View = () => {
         const stat_tunjab = data.get('stat_tunjab')
         var tmt_jab = data.get('tmt_jab')
         const grade = data.get('grade')
-        var tk_papua = data.get('tk_papua')
-        var tk_terluar = data.get('tk_terluar')
-        var tk_terpencil = data.get('tk_terpencil')
         const persekot = data.get('persekot')
         const gantirugi = data.get('gantirugi')
         const sewarumah = data.get('sewarumah')
@@ -266,20 +224,11 @@ export const View = () => {
         if (eselon_sandi == "") {
             eselon_sandi = null
         }
-        if (tk_papua == null) {
-            tk_papua = 0
-        }
-        if (tk_terluar == null) {
-            tk_terluar = 0
-        }
-        if (tk_terpencil == null) {
-            tk_terpencil = 0
-        }
 
         await axios.post(`${process.env.REACT_APP_BACKEND_URL}/update`, {
             id, pangkat, jabatan, satker, dpp,
             kawin, mkg, tmt_kgb, stat_tunjab, tmt_jab,
-            grade, tk_papua, tk_terluar, tk_terpencil, persekot,
+            grade, persekot,
             gantirugi, sewarumah, stat_sandi, eselon_sandi, tmt_sandi, rek
         })
             .then(async function (response) {
@@ -499,26 +448,6 @@ export const View = () => {
                                             <option value="20">20</option>
                                         </select>
                                     </td>
-                                </tr>
-                                <tr className='row my-1'>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <input class="form-check-input border border-3 p-2" type="checkbox" value="1" id="tk_papua" name='tk_papua' />
-                                        <label class="form-check-label p-1 ps-2" for="flexCheckDefault">
-                                            Tunjangan Khusus Papua
-                                        </label>
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <input class="form-check-input border border-3 p-2" type="checkbox" value="1" id="tk_terpencil" name='tk_terpencil' />
-                                        <label class="form-check-label p-1 ps-2" for="flexCheckDefault">
-                                            Tunjangan Khusus Terpencil
-                                        </label>
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <input class="form-check-input border border-3 p-2" type="checkbox" value="1" id="tk_terluar" name='tk_terluar' />
-                                        <label class="form-check-label p-1 ps-2" for="flexCheckDefault">
-                                            Tunjangan Khusus Terluar
-                                        </label>
-                                    </div>
                                 </tr>
                                 <tr>
                                     <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Potongan</strong></p>

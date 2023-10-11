@@ -65,21 +65,42 @@ export const Main = () => {
                         console.log(response.data)
                         var stringRecent = ""
                         for (let index = 0; index < response.data.length; index++) {
-                            var jam = Number(response.data[index].log_stamp.slice(11,13)) + 7
-                            if (jam>=24) {
-                                jam=jam-24
+                            var jam = Number(response.data[index].log_stamp.slice(11, 13)) + 7
+                            if (jam >= 24) {
+                                jam = jam - 24
                             }
-                            const stringWaktu = response.data[index].tipe_label + ' pada ' + response.data[index].log_stamp.slice(8,10) + ' ' + response.data[index].log_stamp.slice(5,7) + ' ' + response.data[index].log_stamp.slice(0,4) + ' ' + jam + response.data[index].log_stamp.slice(13,20)
+                            var jab_label = response.data[index].jab_label
+                            if (jab_label == null) {
+                                jab_label = " "
+                            }
+                            const stringWaktu = response.data[index].tipe_label + ' pada ' + response.data[index].log_stamp.slice(8, 10) + ' ' + response.data[index].log_stamp.slice(5, 7) + ' ' + response.data[index].log_stamp.slice(0, 4) + ' ' + jam + response.data[index].log_stamp.slice(13, 20)
                             stringRecent +=
                                 `<div class='row border-2 border-bottom'>
                                     <p class='col-6 col-md-3 border-2 border-end py-2 m-0'>${response.data[index].pers_nama}</p>
                                     <p class='col-2 d-none d-md-block border-2 border-end py-2 m-0'>${response.data[index].pangkat_label} ${response.data[index].korps_kode}</p>
                                     <p class='col-2 d-none d-md-block border-2 border-end py-2 m-0'>${response.data[index].satker_label}</p>
-                                    <p class='col-2 d-none d-md-block border-2 border-end py-2 m-0'>${response.data[index].jab_label}</p>
+                                    <p class='col-2 d-none d-md-block border-2 border-end py-2 m-0'>${jab_label}</p>
                                     <p class='col-6 col-md-3 border-2 border-end py-2 m-0'>${stringWaktu}</p>
                                 </div>`
                         }
                         document.getElementById('recent').innerHTML = stringRecent
+                    } else {
+                        console.log('Tidak berhasil mengambil postingan')
+                        return
+                    }
+                })
+                .catch(async function (error) {
+                    console.log(error)
+                    return
+                });
+
+            axios.get(`${process.env.REACT_APP_BACKEND_URL}/main`)
+                .then(function (response) {
+                    if (response.status == 200) {
+                        console.log(response.data[0][0].count)
+                        document.getElementById('total').innerHTML = response.data[0][0].count
+                        document.getElementById('ubah').innerHTML = response.data[1][0].count
+                        document.getElementById('tambah').innerHTML = response.data[2][0].count
                     } else {
                         console.log('Tidak berhasil mengambil postingan')
                         return
@@ -106,22 +127,25 @@ export const Main = () => {
                 </div>
                 <div className='p-3 p-md-5'>
                     <div className='row'>
-                        <div className='col-12 col-md-6'>
+                        <div className='col-12 col-md-4'>
                             <div className='bg-putihdikit rounded-2 p-3 border border-3'>
-                                <h5>Kumulatif Tunjangan Kinerja</h5>
-                                <Bar data={data1} />
+                                <h5>Total Record</h5>
+                                <p>{Date().slice(0,25)}</p>
+                                <h1 id='total'></h1>
                             </div>
                         </div>
-                        <div className='col-12 col-md-3'>
+                        <div className='col-12 col-md-4'>
                             <div className='bg-putihdikit rounded-2 p-3 border border-3'>
-                                <h5>DSPP Pusinfolahta TNI</h5>
-                                <Doughnut data={data} />
+                                <h5>Jumlah Perubahan</h5>
+                                <p>{Date().slice(4,7)} {Date().slice(11,15)}</p>
+                                <h1 id='ubah'></h1>
                             </div>
                         </div>
-                        <div className='col-12 col-md-3'>
+                        <div className='col-12 col-md-4'>
                             <div className='bg-putihdikit rounded-2 p-3 border border-3'>
-                                <h5>DSPP Pusinfolahta TNI</h5>
-                                <Doughnut data={data} />
+                                <h5>Jumlah Penambahan</h5>
+                                <p>{Date().slice(4,7)} {Date().slice(11,15)}</p>
+                                <h1 id='tambah'></h1>
                             </div>
                         </div>
                     </div>

@@ -121,15 +121,13 @@ export const Tambah = () => {
         const stat_tunjab = data.get('stat_tunjab')
         var tmt_jab = data.get('tmt_jab')
         const grade = data.get('grade')
-        var tk_papua = data.get('tk_papua')
-        var tk_terluar = data.get('tk_terluar')
-        var tk_terpencil = data.get('tk_terpencil')
         const persekot = data.get('persekot')
         const gantirugi = data.get('gantirugi')
         const sewarumah = data.get('sewarumah')
         const stat_sandi = data.get('stat_sandi')
         var eselon_sandi = data.get('eselon_sandi')
         var tmt_sandi = data.get('tmt_sandi')
+        console.log(tmt_sandi)
         const rek = data.get('rek')
 
         if (jabatan == "") {
@@ -143,15 +141,6 @@ export const Tambah = () => {
         }
         if (eselon_sandi == "") {
             eselon_sandi = null
-        }
-        if (tk_papua == null) {
-            tk_papua = 0
-        }
-        if (tk_terluar == null) {
-            tk_terluar = 0
-        }
-        if (tk_terpencil == null) {
-            tk_terpencil = 0
         }
 
         await axios.post(`${process.env.REACT_APP_BACKEND_URL}/tambah`, {
@@ -172,9 +161,6 @@ export const Tambah = () => {
             stat_tunjab,
             tmt_jab,
             grade,
-            tk_papua,
-            tk_terluar,
-            tk_terpencil,
             persekot,
             gantirugi,
             sewarumah,
@@ -382,26 +368,6 @@ export const Tambah = () => {
                                             <option value="19">19</option>
                                             <option value="20">20</option>
                                         </select>
-                                    </div>
-                                </div>
-                                <div className='row'>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <input class="form-check-input border border-3 p-2" type="checkbox" value="1" id="tk_papua" name='tk_papua' />
-                                        <label class="form-check-label p-1 ps-2" for="flexCheckDefault">
-                                            Tunjangan Khusus Papua
-                                        </label>
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <input class="form-check-input border border-3 p-2" type="checkbox" value="1" id="tk_terpencil" name='tk_terpencil' />
-                                        <label class="form-check-label p-1 ps-2" for="flexCheckDefault">
-                                            Tunjangan Khusus Terpencil
-                                        </label>
-                                    </div>
-                                    <div class="col-12 col-md-4 py-1">
-                                        <input class="form-check-input border border-3 p-2" type="checkbox" value="1" id="tk_terluar" name='tk_terluar' />
-                                        <label class="form-check-label p-1 ps-2" for="flexCheckDefault">
-                                            Tunjangan Khusus Terluar
-                                        </label>
                                     </div>
                                 </div>
                                 <p className='p-1 pt-3 pb-0 text-decoration-underline'><strong>Potongan</strong></p>

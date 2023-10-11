@@ -183,20 +183,23 @@ export const Satker = () => {
                                             </div>
                                             <div class='border-bottom'>`
                     for (let index = 0; index < response.data.length; index++) {
-                        var tunjangan_khusus = pph21_tunkin(response.data[index].kpkt_jumlah, response.data[index].grade_index, response.data[index].tunjab_jumlah, response.data[index].kawin_label, response.data[index].kawin_ptkp);
+                        var tunjangan_khusus = pph21_tunkin(response.data[index].kpkt_jumlah, response.data[index].grade_index, response.data[index].tunjab_jumlah, response.data[index].kawin_label, response.data[index].kawin_ptkp,response.data[index].esandi_jumlah,response.data[index].pangkat_kpkt);
                         var pen_bruto_tunkin = tunjangan_khusus + response.data[index].grade_index;
                         console.log(tunjangan_khusus)
+                        var tmt_jab = response.data[index].pers_tmt_jab;
+                        if (response.data[index].pers_tmt_jab == null) {
+                            tmt_jab = ""
+                        }
                         dataExcel.push({
                             "No. Urut": index + 1,
-                            "Nrp/Nip": response.data[index].pers_nrp,
                             "Nama": response.data[index].pers_nama,
-                            "Satker": response.data[index].satker_label,
-                            "Jabatan": response.data[index].jab_label,
+                            "Nrp/Nip": response.data[index].pers_nrp,
                             "Pkt/Gol": response.data[index].pangkat_label + " " + response.data[index].korps_kode,
+                            "Jabatan": response.data[index].jab_label,
+                            "Satker": response.data[index].satker_label,
                             "Tunjangan Kinerja": rupiah(response.data[index].grade_index).slice(0, rupiah(response.data[index].grade_index).length - 3),
                             "Tunjangan Khusus": rupiah(tunjangan_khusus).slice(0, rupiah(tunjangan_khusus).length - 3),
-                            "Pendapatan Bruto": rupiah(pen_bruto_tunkin).slice(0, rupiah(pen_bruto_tunkin).length - 3),
-                            "Tgl. Lahir": String(Number(response.data[index].pers_tl.slice(8, 10)) + 1) + '-' + response.data[index].pers_tl.slice(5, 7) + '-' + response.data[index].pers_tl.slice(0, 4)
+                            "Pendapatan Bruto": rupiah(pen_bruto_tunkin).slice(0, rupiah(pen_bruto_tunkin).length - 3)
                         })
                         if ((orgHalaman % 8 == 0 && orgHalaman != 0) || (response.data[index].pers_dpp == 2 && pns == 0)) {
                             stringLaporan += `</div>
@@ -407,7 +410,7 @@ export const Satker = () => {
                                                 <div class='col-3 row'>
                                                     <div class='col-9'>
                                                         <span>${response.data[index].jab_label}</span><br />
-                                                        <span>(${response.data[index].pers_grade}) ${Number(response.data[index].pers_tmt_jab.slice(8, 10)) + 1}-${response.data[index].pers_tmt_jab.slice(5, 7)}-${response.data[index].pers_tmt_jab.slice(0, 4)}</span><br />
+                                                        <span>(${response.data[index].pers_grade}) ${Number(tmt_jab.slice(8, 10)) + 1}-${tmt_jab.slice(5, 7)}-${tmt_jab.slice(0, 4)}</span><br />
                                                         <span>${rupiah(response.data[index].tunjab_jumlah).slice(0, rupiah(response.data[index].tunjab_jumlah).length - 3)}</span><br />
                                                         <span>${rupiah(response.data[index].kpkt_jumlah).slice(0, rupiah(response.data[index].kpkt_jumlah).length - 3)}</span><br />
                                                     </div>
@@ -514,11 +517,11 @@ export const Satker = () => {
 
     const tun_ulp = 1860000;
 
-    function gaji_tunkin(gaji_pokok, tunkin, tun_pasangan, tun_anak, iuran_pensiun, tunjab, pot_bpjs, pot_tht, tun_beras) {
-        var gaji_bruto = gaji_pokok + tun_pasangan + tun_anak + tunjab + tun_beras + tun_ulp + tunkin;
-        var gaji_netto = gaji_bruto - iuran_pensiun - pot_bpjs - pot_tht;
+    function gaji_tunkin(gaji_pokok, tunkin, jumlah_tunjangan, jumlah_potongan) {
+        var gaji_bruto = gaji_pokok + tunkin + jumlah_tunjangan;
+        var gaji_netto = gaji_bruto - jumlah_potongan;
         return gaji_netto;
-    }
+      }
 
     function pph21(gaji_netto, ptkp) {
         var netto_setahun = 12 * gaji_netto;
@@ -539,29 +542,43 @@ export const Satker = () => {
         }
     }
 
-    function pph21_tunkin(gaji_pokok, tunkin, tunjab, stat_ptkp, ptkp) {
+    function pph21_tunkin(gaji_pokok, tunkin, tunjab, stat_ptkp, ptkp, tun_sandi, kode_pangkat) {
+        //TUNJANGAN BERAS
         var jumlah_beras = 0;
-        if (stat_ptkp.startsWith("T")) {
-            var tun_pasangan = 0;
-        } else if (stat_ptkp.startsWith("K")) {
-            var tun_pasangan = 0.1 * gaji_pokok;
-            jumlah_beras += 1;
-        }
-
-        var tun_anak = parseInt(stat_ptkp.slice(-3, -2)) * 0.02 * gaji_pokok;
         jumlah_beras += parseInt(stat_ptkp.slice(-3, -2));
         var tun_beras = (jumlah_beras * 10 + 18) * 7242;
-
+      
+        //TUNJANGAN PASANGAN DAN ANAK
+        if (stat_ptkp.startsWith("T")) {
+          var tun_pasangan = 0;
+        } else if (stat_ptkp.startsWith("K")) {
+          var tun_pasangan = 0.1 * gaji_pokok;
+          jumlah_beras += 1;
+        }
+        var tun_anak = parseInt(stat_ptkp.slice(-3, -2)) * 0.02 * gaji_pokok;
+      
+        //TUNJANGAN SANDI
+        if (tun_sandi == null) tun_sandi = 0;
+      
+        //POTONGAN
         var iuran_pensiun = 0.0475 * gaji_pokok;
         var pot_bpjs = 0.02 * gaji_pokok;
         var pot_tht = 0.037 * gaji_pokok;
-
-        var pph21tunkin = pph21(gaji_tunkin(gaji_pokok, tunkin, tun_pasangan, tun_anak, iuran_pensiun, tunjab, pot_bpjs, pot_tht, tun_beras), ptkp);
-        var pph21notunkin = pph21(gaji_tunkin(gaji_pokok, 0, tun_pasangan, tun_anak, iuran_pensiun, tunjab, pot_bpjs, pot_tht, tun_beras), ptkp);
-        var pajak = pph21tunkin - pph21notunkin;
-
-        return pajak;
-    }
+      
+        //JUMLAH
+        var jumlah_tunjangan = tun_pasangan + tun_anak + tunjab + tun_beras + tun_ulp + tun_sandi;
+        var jumlah_potongan = iuran_pensiun + pot_bpjs + pot_tht;
+      
+        var pajak = 0;
+        if (kode_pangkat < 31 || (kode_pangkat < 71 && kode_pangkat >= 51)) {
+          return pajak;
+        } else {
+          var pph21tunkin = pph21(gaji_tunkin(gaji_pokok, tunkin, jumlah_tunjangan, jumlah_potongan), ptkp);
+          var pph21notunkin = pph21(gaji_tunkin(gaji_pokok, 0, jumlah_tunjangan, jumlah_potongan), ptkp);
+          pajak = pph21tunkin - pph21notunkin;
+          return pajak;
+        }
+      }
 
     function sleep(ms) {
         return new Promise(

@@ -69,9 +69,21 @@ export const Personel = () => {
                 if (response.status == 200) {
                     const detail_pers = response.data['0']
                     setDataPers(detail_pers)
-                    console.log(detail_pers.pers_tmt_jab)
+                    var jab_label = detail_pers.jab_label
+                    if (jab_label == null) {
+                        jab_label = " "
+                    }
+                    var jabes_label = detail_pers.jabes_label
+                    if (jabes_label == null) {
+                        jabes_label = " "
+                    }
+                    console.log(detail_pers)
+                    var esandi_jumlah = detail_pers.esandi_jumlah
+                    if (esandi_jumlah == null) {
+                        esandi_jumlah = 0
+                    }
                     document.title = 'Pusinfolahta TNI | Tunjangan Kinerja | ' + detail_pers.pers_nama
-                    var tunjangan_khusus = pph21_tunkin(detail_pers.kpkt_jumlah, detail_pers.grade_index, detail_pers.tunjab_jumlah, detail_pers.kawin_label, detail_pers.kawin_ptkp);
+                    var tunjangan_khusus = pph21_tunkin(detail_pers.kpkt_jumlah, detail_pers.grade_index, detail_pers.tunjab_jumlah, detail_pers.kawin_label, detail_pers.kawin_ptkp, detail_pers.esandi_jumlah, detail_pers.pangkat_kpkt, detail_pers.pers_persekot, detail_pers.pers_gantirugi, detail_pers.pers_sewarumah);
                     var pen_bruto_tunkin = tunjangan_khusus + detail_pers.grade_index;
                     var stringLaporan = `
                     <div class='w-100 px-4 py-1' id='lapPers'>
@@ -120,7 +132,7 @@ export const Personel = () => {
                         </div>
                         <div class='row'>
                             <div class='col-3 border border-dark'>Jabatan / Eselon</div>
-                            <div class='col-9 border border-dark'>${detail_pers.jab_label} / ${detail_pers.jabes_label}</div>
+                            <div class='col-9 border border-dark'>${jab_label} / ${jabes_label}</div>
                         </div>
                         <div class='row border border-dark fs-5 fw-semibold'>
                             <br />
@@ -135,6 +147,10 @@ export const Personel = () => {
                         <div class='row'>
                             <div class='col-3 border border-dark'>TJAB/MDS/T.UM</div>
                             <div class='col-9 border border-dark'>${rupiah(detail_pers.tunjab_jumlah).slice(0, rupiah(detail_pers.tunjab_jumlah).length - 3)}</div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-3 border border-dark'>T. Sandi</div>
+                            <div class='col-9 border border-dark'>${rupiah(esandi_jumlah).slice(0, rupiah(esandi_jumlah).length - 3)}</div>
                         </div>
                         <div class='row border border-dark fs-5 fw-semibold'>
                             <br />
@@ -206,11 +222,11 @@ export const Personel = () => {
 
     const tun_ulp = 1860000;
 
-    function gaji_tunkin(gaji_pokok, tunkin, tun_pasangan, tun_anak, iuran_pensiun, tunjab, pot_bpjs, pot_tht, tun_beras) {
-        var gaji_bruto = gaji_pokok + tun_pasangan + tun_anak + tunjab + tun_beras + tun_ulp + tunkin;
-        var gaji_netto = gaji_bruto - iuran_pensiun - pot_bpjs - pot_tht;
+    function gaji_tunkin(gaji_pokok, tunkin, jumlah_tunjangan, jumlah_potongan) {
+        var gaji_bruto = gaji_pokok + tunkin + jumlah_tunjangan;
+        var gaji_netto = gaji_bruto - jumlah_potongan;
         return gaji_netto;
-    }
+      }
 
     function pph21(gaji_netto, ptkp) {
         var netto_setahun = 12 * gaji_netto;
@@ -231,29 +247,43 @@ export const Personel = () => {
         }
     }
 
-    function pph21_tunkin(gaji_pokok, tunkin, tunjab, stat_ptkp, ptkp) {
+    function pph21_tunkin(gaji_pokok, tunkin, tunjab, stat_ptkp, ptkp, tun_sandi, kode_pangkat, pot_persekot, pot_gantirugi, pot_sewarumah) {
+        //TUNJANGAN BERAS
         var jumlah_beras = 0;
-        if (stat_ptkp.startsWith("T")) {
-            var tun_pasangan = 0;
-        } else if (stat_ptkp.startsWith("K")) {
-            var tun_pasangan = 0.1 * gaji_pokok;
-            jumlah_beras += 1;
-        }
-
-        var tun_anak = parseInt(stat_ptkp.slice(-3, -2)) * 0.02 * gaji_pokok;
         jumlah_beras += parseInt(stat_ptkp.slice(-3, -2));
         var tun_beras = (jumlah_beras * 10 + 18) * 7242;
-
+      
+        //TUNJANGAN PASANGAN DAN ANAK
+        if (stat_ptkp.startsWith("T")) {
+          var tun_pasangan = 0;
+        } else if (stat_ptkp.startsWith("K")) {
+          var tun_pasangan = 0.1 * gaji_pokok;
+          jumlah_beras += 1;
+        }
+        var tun_anak = parseInt(stat_ptkp.slice(-3, -2)) * 0.02 * gaji_pokok;
+      
+        //TUNJANGAN SANDI
+        if (tun_sandi == null) tun_sandi = 0;
+      
+        //POTONGAN
         var iuran_pensiun = 0.0475 * gaji_pokok;
         var pot_bpjs = 0.02 * gaji_pokok;
         var pot_tht = 0.037 * gaji_pokok;
-
-        var pph21tunkin = pph21(gaji_tunkin(gaji_pokok, tunkin, tun_pasangan, tun_anak, iuran_pensiun, tunjab, pot_bpjs, pot_tht, tun_beras), ptkp);
-        var pph21notunkin = pph21(gaji_tunkin(gaji_pokok, 0, tun_pasangan, tun_anak, iuran_pensiun, tunjab, pot_bpjs, pot_tht, tun_beras), ptkp);
-        var pajak = pph21tunkin - pph21notunkin;
-
-        return pajak;
-    }
+      
+        //JUMLAH
+        var jumlah_tunjangan = tun_pasangan + tun_anak + tunjab + tun_beras + tun_ulp + tun_sandi;
+        var jumlah_potongan = iuran_pensiun + pot_bpjs + pot_tht + pot_persekot + pot_gantirugi + pot_sewarumah;
+      
+        var pajak = 0;
+        if (kode_pangkat < 31 || (kode_pangkat < 71 && kode_pangkat >= 51)) {
+          return pajak;
+        } else {
+          var pph21tunkin = pph21(gaji_tunkin(gaji_pokok, tunkin, jumlah_tunjangan, jumlah_potongan), ptkp);
+          var pph21notunkin = pph21(gaji_tunkin(gaji_pokok, 0, jumlah_tunjangan, jumlah_potongan), ptkp);
+          pajak = pph21tunkin - pph21notunkin;
+          return pajak;
+        }
+      }
 
     return (
         <div className="bg d-flex">
