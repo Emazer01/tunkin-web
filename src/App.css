@@ -57,6 +57,15 @@
   background-color: #FDFFFF;
 }
 
+.bg-img{
+  background-image: url('/src/images/bg-login.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat; 
+  height: 100vh;
+  width: 100wh;
+}
+
 .font-nunito{
   font-family: 'Nunito Sans', sans-serif;
 }

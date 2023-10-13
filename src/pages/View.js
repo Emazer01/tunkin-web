@@ -14,35 +14,10 @@ export const View = () => {
         satker: { a: 'asd' }
     })
     const [dataPers, setDataPers] = React.useState({
-        nrp: '',
-        nama: '',
-        gender: '',
-        matra: '',
-        pangkat: '',
-        korps: '',
-        jabatan: '',
-        satker: '',
-        dpp: '',
-        kawin: '',
-        agama: '',
-        pers_tl: '           ',
-        mkg: '',
-        tmt_kgb: '',
-        stat_tunjab: '',
-        tmt_jab: '',
-        grade: '',
-        tk_papua: '',
-        tk_terluar: '',
-        tk_terpencil: '',
-        persekot: '',
-        gantirugi: '',
-        sewarumah: '',
-        stat_sandi: '',
-        eselon_sandi: '',
-        tmt_sandi: '',
-        rek: ''
+        nrp: '', nama: '', gender: '', matra: '', pangkat: '', korps: '', jabatan: '', satker: '', dpp: '',
+        kawin: '', agama: '', pers_tl: '           ', mkg: '', tmt_kgb: '', stat_tunjab: '', tmt_jab: '',
+        grade: '', persekot: '', gantirugi: '', sewarumah: '', stat_sandi: '', eselon_sandi: '', tmt_sandi: '', rek: ''
     })
-
 
     React.useEffect(() => {
         document.getElementById('btn-beranda').classList.remove('sidebar-active')
@@ -259,10 +234,10 @@ export const View = () => {
 
     }
 
-    const handleHapus = async() => {
+    const handleHapus = async () => {
         const pers_id = dataPers.pers_id
         await axios.post(`${process.env.REACT_APP_BACKEND_URL}/hapus`, {
-            pers_id : pers_id
+            pers_id: pers_id
         })
             .then(async function (response) {
                 if (response.status == 200) {
