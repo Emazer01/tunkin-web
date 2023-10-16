@@ -11,6 +11,7 @@ import { Bar } from 'react-chartjs-2';
 import faker from 'faker';
 import { Sidebar } from '../component/Sidebar';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 ChartJS.register(CategoryScale,
     LinearScale,
@@ -19,8 +20,10 @@ ChartJS.register(CategoryScale,
     Title,
     Tooltip,
     Legend);
+    
 
 export const Main = () => {
+    const navigate = useNavigate()
     const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'September', 'October', 'November', 'December'];
     const data1 = {
         labels,
@@ -52,6 +55,27 @@ export const Main = () => {
     }
 
     React.useEffect(() => {
+        
+        const token = localStorage.getItem('token');
+        const id = localStorage.getItem('id');
+        function verifikasi(id,token) {
+            axios.post(`${process.env.REACT_APP_BACKEND_URL}/verify`, {
+                token: token
+            })
+                .then(function (response) {
+                    console.log(response)
+                    if (response.status == 200 && id == response.data[0].user_id) {
+                        return
+                    } else {
+                        navigate('/login')
+                    }
+                })
+                .catch(function (error) {
+                    navigate('/login')
+                });
+        }
+        // panggil fungsi verifikasi token di bawah sini
+        verifikasi(id,token)
         document.getElementById('btn-beranda').classList.add('sidebar-active')
         document.getElementById('btn-perubahan').classList.remove('sidebar-active')
         document.getElementById('btn-tambah').classList.remove('sidebar-active')
@@ -130,21 +154,21 @@ export const Main = () => {
                         <div className='col-12 col-md-4'>
                             <div className='bg-putihdikit rounded-2 p-3 border border-3'>
                                 <h5>Total Record</h5>
-                                <p>{Date().slice(0,25)}</p>
+                                <p>{Date().slice(0, 25)}</p>
                                 <h1 id='total'></h1>
                             </div>
                         </div>
                         <div className='col-12 col-md-4'>
                             <div className='bg-putihdikit rounded-2 p-3 border border-3'>
                                 <h5>Jumlah Perubahan</h5>
-                                <p>{Date().slice(4,7)} {Date().slice(11,15)}</p>
+                                <p>{Date().slice(4, 7)} {Date().slice(11, 15)}</p>
                                 <h1 id='ubah'></h1>
                             </div>
                         </div>
                         <div className='col-12 col-md-4'>
                             <div className='bg-putihdikit rounded-2 p-3 border border-3'>
                                 <h5>Jumlah Penambahan</h5>
-                                <p>{Date().slice(4,7)} {Date().slice(11,15)}</p>
+                                <p>{Date().slice(4, 7)} {Date().slice(11, 15)}</p>
                                 <h1 id='tambah'></h1>
                             </div>
                         </div>

@@ -1,8 +1,10 @@
 import { Sidebar } from '../component/Sidebar';
 import * as React from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const Perubahan = () => {
+    const navigate = useNavigate()
     const [recent, setRecent] = React.useState(
         [{
             nrp: 123456,
@@ -13,6 +15,26 @@ export const Perubahan = () => {
         }]
     )
     React.useEffect(() => {
+        const token = localStorage.getItem('token');
+        const id = localStorage.getItem('id');
+        function verifikasi(id, token) {
+            axios.post(`${process.env.REACT_APP_BACKEND_URL}/verify`, {
+                token: token
+            })
+                .then(function (response) {
+                    console.log(response)
+                    if (response.status == 200 && id == response.data[0].user_id) {
+                        return
+                    } else {
+                        navigate('/login')
+                    }
+                })
+                .catch(function (error) {
+                    navigate('/login')
+                });
+        }
+        // panggil fungsi verifikasi token di bawah sini
+        verifikasi(id, token)
         document.getElementById('btn-beranda').classList.remove('sidebar-active')
         document.getElementById('btn-perubahan').classList.add('sidebar-active')
         document.getElementById('btn-tambah').classList.remove('sidebar-active')
