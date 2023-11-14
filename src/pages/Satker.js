@@ -563,10 +563,7 @@ export const Satker = () => {
     }
 
     function pph21_tunkin(gaji_pokok, tunkin, tunjab, stat_ptkp, ptkp, tun_sandi, kode_pangkat) {
-        //TUNJANGAN BERAS
         var jumlah_beras = 0;
-        jumlah_beras += parseInt(stat_ptkp.slice(-3, -2));
-        var tun_beras = (jumlah_beras * 10 + 18) * 7242;
       
         //TUNJANGAN PASANGAN DAN ANAK
         if (stat_ptkp.startsWith("T")) {
@@ -576,6 +573,10 @@ export const Satker = () => {
           jumlah_beras += 1;
         }
         var tun_anak = parseInt(stat_ptkp.slice(-3, -2)) * 0.02 * gaji_pokok;
+
+        //TUNJANGAN BERAS
+        jumlah_beras += parseInt(stat_ptkp.slice(-3, -2));
+        var tun_beras = (jumlah_beras * 10 + 18) * 7242;
       
         //TUNJANGAN SANDI
         if (tun_sandi == null) tun_sandi = 0;
@@ -583,7 +584,7 @@ export const Satker = () => {
         //POTONGAN
         var iuran_pensiun = 0.0475 * gaji_pokok;
         var pot_bpjs = 0.02 * gaji_pokok;
-        var pot_tht = 0.037 * gaji_pokok;
+        var pot_tht = 0.0325 * gaji_pokok;
       
         //JUMLAH
         var jumlah_tunjangan = tun_pasangan + tun_anak + tunjab + tun_beras + tun_ulp + tun_sandi;

@@ -90,7 +90,7 @@ export const Cetak = () => {
                             }
                             stringRecent +=
                                 `<a href='/cetak/personel/?id=${response.data[index].pers_id}' class='row btn btn-light d-flex p-0 rounded-0 text-start border-2 border-bottom'>
-                                    <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${response.data[index].pers_nrp}</small></p>
+                                    <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small class='text-break'>${response.data[index].pers_nrp}</small></p>
                                     <p class='col-6 col-md-3 border-2 border-end py-1 m-0'><small>${response.data[index].pers_nama}</small></p>
                                     <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${response.data[index].pangkat_label} ${response.data[index].korps_kode}</small></p>
                                     <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${response.data[index].satker_label}</small></p>
@@ -139,7 +139,7 @@ export const Cetak = () => {
                 }
                 stringRecent +=
                     `<a href='/cetak/personel/?id=${recent[index].pers_id}' class='row btn btn-light d-flex p-0 rounded-0 text-start border-2 border-bottom'>
-                    <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${recent[index].pers_nrp}</small></p>
+                    <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small class='text-break'>${recent[index].pers_nrp}</small></p>
                     <p class='col-6 col-md-3 border-2 border-end py-1 m-0'><small>${recent[index].pers_nama}</small></p>
                     <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${recent[index].pangkat_label} ${recent[index].korps_kode}</small></p>
                     <p class='col-2 d-none d-md-block border-2 border-end py-1 m-0'><small>${recent[index].satker_label}</small></p>

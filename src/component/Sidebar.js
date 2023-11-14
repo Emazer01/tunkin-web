@@ -42,6 +42,11 @@ export const Sidebar = () => {
                     </a>
                 </li>
             </ul>
+            <hr />
+            <button onClick={()=>{
+                localStorage.clear();
+                window.location.reload();
+            }} className='btn btn-danger'><i class="bi bi-box-arrow-left"></i>&nbsp;&nbsp;&nbsp;Logout</button>
         </div>
     )
 }
